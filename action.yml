@@ -7,12 +7,10 @@ inputs:
     default: '.'
 
   tags:
-    required: true
-    default: '.'
+    required: false
 
   labels:
-    required: true
-    default: '.'
+    required: false
 
 runs:
   using: composite
