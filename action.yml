@@ -26,7 +26,7 @@ runs:
 
     - name: 'Extract metadata'
       id: metadata
-      uses: docker/meatadata-action@v5
+      uses: docker/metadata-action@v5
       with:
         images: ghcr.io/${{ github.event.repository.name }}
         tags: |
