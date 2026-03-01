@@ -1,0 +1,44 @@
+name: 'Build and push image'
+description: 'Build a Docker image and push it to GHCR'
+
+inputs:
+  context:
+    required: true
+    default: '.'
+
+  tags:
+    required: true
+    default: '.'
+
+  labels:
+    required: true
+    default: '.'
+
+runs:
+  using: composite
+  steps:
+    - name: 'Log in to registry'
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 'Extract metadata'
+      id: metadata
+      uses: docker/meatadata-action@v5
+      with:
+        images: ghcr.io/${{ github.event.repository.name }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+
+    - name: 'Build and push image'
+      uses: docker/build-push-action@v6
+      with:
+        context: ${{ inputs.context || '.' }}
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ inputs.tags || steps.meta.outputs.tags }}
+        labels: ${{ inputs.labels || steps.meta.outputs.labels }}
