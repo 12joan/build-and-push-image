@@ -9,6 +9,9 @@ inputs:
     required: true
     default: '.'
 
+  file:
+    required: false
+
   tags:
     required: false
 
@@ -39,7 +42,8 @@ runs:
     - name: 'Build and push image'
       uses: docker/build-push-action@v6
       with:
-        context: ${{ inputs.context || '.' }}
+        context: ${{ inputs.context }}
+        file: ${{ inputs.file || format('{0}/Dockerfile', inputs.context) }}
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ inputs.tags || steps.metadata.outputs.tags }}
         labels: ${{ inputs.labels || steps.metadata.outputs.labels }}
