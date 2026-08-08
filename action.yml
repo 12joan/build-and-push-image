@@ -40,10 +40,11 @@ runs:
           type=semver,pattern={{major}}.{{minor}}
 
     - name: 'Build and push image'
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: ${{ inputs.context }}
         file: ${{ inputs.file || format('{0}/Dockerfile', inputs.context) }}
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ inputs.tags || steps.metadata.outputs.tags }}
         labels: ${{ inputs.labels || steps.metadata.outputs.labels }}
+        platforms: linux/amd64,linux/arm64
