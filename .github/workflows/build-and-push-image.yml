@@ -71,12 +71,12 @@ jobs:
           labels: ${{ inputs.labels || steps.metadata.outputs.labels }}
           platforms: ${{ matrix.platform }}
 
-      - name: 'Output image source'
+      - name: 'Output image digest'
         id: outputs
-        run: echo "$OUTPUT_NAME=$IMAGE_SOURCE" >> "$GITHUB_OUTPUT"
+        run: echo "$OUTPUT_NAME=$DIGEST" >> "$GITHUB_OUTPUT"
         env:
           OUTPUT_NAME: ${{ matrix.output }}
-          IMAGE_SOURCE: ${{ env.IMAGE_NAME }}:${{ steps.build.outputs.digest }}
+          DIGEST: ${{ steps.build.outputs.digest }}
 
   combine:
     name: 'Combine and push images'
@@ -107,9 +107,9 @@ jobs:
       - name: 'Build and push combined image'
         run: |
           TAG_OPTIONS="-t $(echo $TAGS | sed 's/,/ -t /g')"
-          docker buildx imagetools create $TAG_OPTIONS $SOURCE_IMAGES
+          docker buildx imagetools create $TAG_OPTIONS $SOURCE_DIGESTS
         env:
           TAGS: ${{ steps.metadata.outputs.tags }}
-          SOURCE_IMAGES: |
+          SOURCE_DIGESTS: |
             ${{ needs.build.outputs.linux_amd64 }}
             ${{ needs.build.outputs.linux_arm64 }}
