@@ -1,4 +1,7 @@
-name: 'Build and push image'
+# This action uses QEMU to produce multi-platform builds inefficiently. Please
+# migrate to the reusable workflow, which builds each platform natively.
+
+name: 'Build and push image (deprecated)'
 description: 'Build a Docker image and push it to GHCR'
 
 inputs:
