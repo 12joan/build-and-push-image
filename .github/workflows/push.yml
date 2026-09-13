@@ -1,0 +1,12 @@
+name: On push
+
+on: push
+
+jobs:
+  test-reusable-workflow:
+    name: 'Test reusable workflow'
+    uses: ./.github/workflows/build-and-push-image.yml
+    with:
+      context: testing
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
