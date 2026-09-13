@@ -4,6 +4,7 @@ on: push
 
 jobs:
   test-reusable-workflow:
+    name: 'Test reusable workflow'
     uses: ./.github/workflows/build-and-push-image.yml
     with:
       context: testing

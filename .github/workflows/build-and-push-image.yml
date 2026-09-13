@@ -22,15 +22,17 @@ env:
 
 jobs:
   build:
-    name: 'Build for ${{ matrix.platform }}'
+    name: 'Build for ${{ matrix.name }}'
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
         include:
-          - platform: linux/amd64
+          - name: Linux AMD
+            platform: linux/amd64
             runner: ubuntu-24.04
             output: linux_amd64
-          - platform: linux/arm64
+          - name: Linux ARM
+            platform: linux/arm64
             runner: ubuntu-24.04-arm
             output: linux_arm64
     outputs:
@@ -79,7 +81,7 @@ jobs:
           DIGEST: ${{ steps.build.outputs.digest }}
 
   combine:
-    name: 'Combine and push images'
+    name: 'Build multi-platform image'
     runs-on: ubuntu-24.04
     needs: build
     steps:
