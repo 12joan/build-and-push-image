@@ -13,6 +13,9 @@ on:
       labels:
         type: string
         required: false
+      tags:
+        type: string
+        required: false
     secrets:
       github-token:
         required: true
@@ -111,7 +114,7 @@ jobs:
           TAG_OPTIONS="-t $(echo $TAGS | sed 's/,/ -t /g')"
           docker buildx imagetools create $TAG_OPTIONS $SOURCE_DIGESTS
         env:
-          TAGS: ${{ steps.metadata.outputs.tags }}
+          TAGS: ${{ inputs.tags || steps.metadata.outputs.tags }}
           SOURCE_DIGESTS: |
             ${{ needs.build.outputs.linux_amd64 }}
             ${{ needs.build.outputs.linux_arm64 }}
