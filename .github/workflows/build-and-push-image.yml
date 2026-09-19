@@ -75,6 +75,8 @@ jobs:
           outputs: 'type=image,"name=${{ env.IMAGE_NAME }}",oci-artifact=true,push-by-digest=true,name-canonical=true,push=true'
           labels: ${{ inputs.labels || steps.metadata.outputs.labels }}
           platforms: ${{ matrix.platform }}
+        env:
+          BUILDX_NO_DEFAULT_ATTESTATIONS: 1
 
       - name: 'Output image digest'
         id: outputs
