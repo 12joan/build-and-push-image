@@ -16,6 +16,9 @@ on:
       tags:
         type: string
         required: false
+      target:
+        type: string
+        required: false
     secrets:
       github-token:
         required: true
@@ -71,6 +74,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: ${{ inputs.context }}
+          target: ${{ inputs.target }}
           file: ${{ inputs.file || format('{0}/Dockerfile', inputs.context) }}
           outputs: 'type=image,"name=${{ env.IMAGE_NAME }}",oci-artifact=true,push-by-digest=true,name-canonical=true,push=true'
           labels: ${{ inputs.labels || steps.metadata.outputs.labels }}
